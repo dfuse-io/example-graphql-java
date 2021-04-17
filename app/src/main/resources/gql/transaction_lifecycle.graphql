@@ -1,0 +1,114 @@
+subscription ($hash: String!) {
+  transactionLifecycle(hash: $hash) {
+    hash
+    currentState
+    transitionName
+    transition {
+      __typename
+      ... on TrxTransitionInit {
+        confirmations
+        transaction {
+          ...Transaction
+        }
+        trace {
+          ...Trace
+        }
+      }
+      ... on TrxTransitionPooled {
+        transaction {
+          ...Transaction
+        }
+      }
+      ... on TrxTransitionSpeculativelyExecuted {
+        trace {
+          ...Trace
+        }
+      }
+      ... on TrxTransitionMined {
+        trace {
+          ...Trace
+        }
+      }
+      ... on TrxTransitionConfirmed {
+        confirmations
+      }
+    }
+  }
+}
+
+fragment Transaction on Transaction {
+  hash
+  to
+  from
+  input {
+    data
+    json {
+      type
+      name
+      value
+    }
+  }
+}
+
+fragment Trace on TransactionTrace {
+  hash
+  to
+  from
+  status
+  flatCalls {
+    ...Call
+  }
+}
+
+fragment Call on Call {
+  index
+  parentIndex
+  depth
+  callType
+  from
+  to
+  value(encoding: HEX)
+  gasConsumed
+  gasLimit
+  stateReverted
+  status
+  failureCause
+  input {
+    data
+    json {
+      type
+      name
+      value
+    }
+  }
+  method {
+    hexSignature
+    textSignature
+  }
+  returnData
+  storageChanges {
+    key
+    address
+    oldValue
+    newValue
+  }
+  balanceChanges {
+    address
+    oldValue
+    newValue
+    reason
+  }
+  logs {
+    ...Log
+  }
+}
+
+fragment Log on EventLog {
+  address
+  topics
+  data
+  blockIndex
+  transactionIndex
+}
+
+
