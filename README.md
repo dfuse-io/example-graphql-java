@@ -72,7 +72,7 @@ $ which protoc-gen-grpc-java
 Then you can generate the necessary files with the following command, we assume you are at the root of the project:
 
 ```
-protoc -I=app/src/main/proto --java_out=app/src/main/java --grpc-java_out=app/src/main dfuse/graphql/v1/graphql.proto
+protoc -I=app/src/main/proto --java_out=app/src/main/java --grpc-java_out=app/src/main/java dfuse/graphql/v1/graphql.proto
 ```
 
 Of course, it's recommended you integrate the generated files inside a different source set as well as making the
